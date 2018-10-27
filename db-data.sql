@@ -1,0 +1,2 @@
+INSERT INTO FilepotDB.userpool (userName, password, fullName, nick) VALUES ('ytxiang@sjsu.edu', 'test123', 'Yunting Xiang', 'yun');
+INSERT INTO FilepotDB.userpool (userName, password, fullName, nick) VALUES ('xiangyunting', 'test123', 'Xiang, Yunting', '');

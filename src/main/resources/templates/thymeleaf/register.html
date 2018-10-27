@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create a new user</title>
+    <div th:replace="head"></div>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper">
+
+    <div th:replace="header"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="callout callout-danger lead" th:if="${error}">
+                    <h4>Error!</h4>
+                    <p th:text="${error}"/>
+                </div>
+                <div class="callout callout-info lead" th:if="${msg}">
+                    <h4 th:text="${msg}"></h4>
+                    <span th:if="${account}">This page will be automatically redirected to <a href="/signon">the Login page</a> in 5 seconds...</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-lg-6" style="align-content: center">
+                    <!-- Horizontal Form -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">New user registration</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form class="form-horizontal" th:action="@{/register}" method="post">
+                            <div class="box-body">
+
+                                <div class="form-group">
+                                    <label for="username" class="col-sm-2 col-lg-4 control-label">Email/User Account</label>
+
+                                    <div class="col-sm-10 col-lg-4">
+                                        <input type="text" name="username" th:value="${account}? ${account.username}"
+                                               class="form-control" id="username" placeholder="" th:readonly="${account}"
+                                               required="required" maxlength="30"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" th:if="${account==null}">
+                                    <label for="password" class="col-sm-2 col-lg-4 control-label">Password</label>
+
+                                    <div class="col-sm-10 col-lg-4">
+                                        <input type="password" name="password"
+                                               class="form-control" id="password" placeholder=""
+                                               required="required" maxlength="20"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" th:if="${account==null}">
+                                    <label for="confirm" class="col-sm-2 col-lg-4 control-label">Confirm Password</label>
+
+                                    <div class="col-sm-10 col-lg-4">
+                                        <input type="password" name="confirm"
+                                               class="form-control" id="confirm" placeholder=""
+                                               required="required" maxlength="20"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="fullname" class="col-sm-2 col-lg-4 control-label">Official Name<br>(First + Last)</label>
+
+                                    <div class="col-sm-10 col-lg-4">
+                                        <input type="text" name="fullname" th:value="${account}? ${account.fullname}"
+                                               class="form-control" id="fullname" placeholder="" required="required"
+                                               th:readonly="${account}" maxlength="100"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="nick" class="col-sm-2 col-lg-4 control-label">Nick (optional)</label>
+
+                                    <div class="col-sm-10 col-lg-4">
+                                        <input type="text" name="nick" th:value="${account}? ${account.nick}"
+                                               class="form-control" id="nick" placeholder=""
+                                               th:readonly="${account}" maxlength="100"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer" style="text-align: center;">
+                                <button type="submit" th:if="${account==null}" class="btn btn-info">Submit</button>
+                            </div>
+                            <!-- /.box-footer -->
+                        </form>
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+            </div>
+            <!-- /.row -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <div th:replace="footer"></div>
+</div>
+<!-- ./wrapper -->
+<div th:replace="script"></div>
+<script th:inline="javascript">
+/*<![CDATA[*/
+  var registered = [[${account} ? true:false]];
+
+  if (registered){
+    setTimeout(function() {
+	   window.location.href = "/signon";
+    }, 5000);
+  }
+/*]]>*/
+</script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-# Filepot
+# Filepot - Cloud File Storage Service
 
 ### Introduction
 Project 1: Filepot</br>

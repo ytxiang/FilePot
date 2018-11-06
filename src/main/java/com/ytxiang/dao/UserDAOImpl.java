@@ -23,15 +23,15 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public List<User> getAllUser() {
 		List<User> user = sessionFactory.getCurrentSession()
-										.createQuery("from User", User.class)
-										.list();
+				.createQuery("from User", User.class)
+				.list();
 		return user;
 	}
 
 	@Override
 	public User getUser(String userName, String password) {
 		Query<User> query = sessionFactory.getCurrentSession()
-										  .getNamedQuery("findUserByCred");
+				 .getNamedQuery("findUserByCred");
 		query.setParameter("userName", userName);
 		query.setParameter("password", password);
 		List<User> list = query.getResultList();

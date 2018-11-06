@@ -2,7 +2,6 @@ package com.ytxiang.config;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -52,6 +51,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	return configuration.getAuthenticationManager();
     }
 
+    final static String[] WSC_DEFAULT_IGNORE = {"/**/*.js",
+	    "/**/*.js.map", "/**/*.ts", "/**/*.css", "/**/*.css.map",
+	    "/**/*.png", "/**/*.gif", "/**/*.jpg", "/**/*.fco",
+	    "/**/*.woff", "/**/*.woff2", "/**/*.font", "/**/*.svg",
+	    "/**/*.ttf","/*.ico", "/404", "/401","/403",
+	    "/error", "/register", "/privacy/**",
+	    "/signin/**", "/auth/**", "/signup/**"};
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 	http.cors().disable();
@@ -62,12 +69,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	http.anonymous().disable();
 	http.requestCache().disable();
 
-	http.rememberMe().userDetailsService(userDetailService).key("uniqueAndSecret").useSecureCookie(false).alwaysRemember(true);
-	http.addFilterAt(urlSecurityInterceptor(), FilterSecurityInterceptor.class);
-	http.formLogin().loginProcessingUrl("/login").loginPage("/signon").defaultSuccessUrl("/").successHandler(new AuthenticationSuccessHandler());
-
+	http.rememberMe().userDetailsService(userDetailService).key("uniqueAndSecret")
+		.useSecureCookie(false).alwaysRemember(true);
+	http.formLogin().loginProcessingUrl("/login").loginPage("/signon").defaultSuccessUrl("/")
+		.successHandler(new AuthenticationSuccessHandler());
 	http.logout().logoutSuccessHandler(new LogoutSuccessHandler());
-	http.exceptionHandling().authenticationEntryPoint(new MyAuthenticationEntryPoint()).accessDeniedHandler(new MyAccessDeniedHandler());
+	http.addFilterAt(urlSecurityInterceptor(), FilterSecurityInterceptor.class);
+	http.exceptionHandling().authenticationEntryPoint(
+		new MyAuthenticationEntryPoint()).accessDeniedHandler(new MyAccessDeniedHandler());
     }
 
     @Override
@@ -80,26 +89,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-	web.ignoring().antMatchers("/**/*.js", "/**/*.js.map", "/**/*.ts", "/**/*.css", "/**/*.css.map", "/**/*.png", "/**/*.gif", "/**/*.jpg", "/**/*.fco", "/**/*.woff", "/**/*.woff2", "/**/*.font", "/**/*.svg", "/**/*.ttf","/*.ico", "/404", "/401","/403", "/error", "/register");
+	    web.ignoring().antMatchers(WSC_DEFAULT_IGNORE);
     }
-
-/*
-    @Bean
-    protected AccessDecisionManager accessDecisionManager() {
-	RoleVoter roleVoter = new RoleVoter();
-	roleVoter.setRolePrefix("");
-	List voters = new ArrayList<>();
-	voters.add(roleVoter);
-	AccessDecisionManager accessDecisionManager = new AffirmativeBased(voters);
-	return accessDecisionManager;
-    }
-
-    public FilterRegistrationBean registration(UrlSecurityInterceptor filter) {
-	FilterRegistrationBean registration = new FilterRegistrationBean(filter);
-	registration.setEnabled(false);
-	return registration;
-    }
-*/
 
     public UrlSecurityInterceptor urlSecurityInterceptor() {
 	return new UrlSecurityInterceptor();
@@ -159,7 +150,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    } else {
 		response.sendRedirect("/403");
 	    }
-
 	}
     }
 

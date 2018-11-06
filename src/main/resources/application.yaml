@@ -1,0 +1,53 @@
+server:
+  port: 443
+  ssl:
+    enabled: true
+    protocol: TLS
+    key-store:
+    key-store-password:
+    keyStoreType:
+    keyAlias: tomcat
+
+spring:
+  datasource:
+    driverClassName:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect:
+    show-sql: true
+  profiles:
+    active: "@spring.profiles.active@"
+  thymeleaf:
+    check-template-location: true
+    prefix: classpath:/templates/thymeleaf/
+    suffix: .html
+    encoding: UTF-8
+    content-type: text/html
+    cache: false
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+
+cloud:
+  aws:
+    rds:
+      driver:
+      url:
+      username:
+      password:
+
+filepot:
+  s3:
+    bucket:
+    namespace:
+    baseurl:
+    access:
+      id:
+      secret:
+
+facebook:
+  client:
+    clientId:
+    clientSecret:

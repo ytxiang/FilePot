@@ -32,15 +32,6 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
     </div>
-    <script >
-            function check(){
-                var a=window.location.search;
-                var b="?error";
-                if(a==b){
-                alert("Incorrect username or password\nPlease try again.");
-                    }
-                }
-    </script>
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -76,6 +67,14 @@
             </div>
         </form>
 
+	<form id="fb_signin" action="/signin/facebook" method="POST">
+	<div id="fb-root"></div>
+	    <input type="hidden" name="scope" value="public_profile" />
+	    <input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
+	    <img th:src="@{/dist/images/sign-in-with-facebook.png}"
+	         border="0" style="cursor: pointer;" onclick="$('#fb_signin').submit();" />
+	</div>
+	</form>
 
     </div>
     <!-- /.login-box-body -->

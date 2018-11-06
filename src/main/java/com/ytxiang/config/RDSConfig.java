@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
@@ -17,7 +16,6 @@ import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 @Configuration
 @EntityScan("com.ytxiang.model")
 @EnableTransactionManagement
-@PropertySource("classpath:application.properties")
 public class RDSConfig {
     @Value("${cloud.aws.rds.driver}") String driverClassName;
     @Value("${cloud.aws.rds.url}") String url;

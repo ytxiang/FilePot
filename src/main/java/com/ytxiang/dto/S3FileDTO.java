@@ -15,12 +15,13 @@ public class S3FileDTO implements Serializable {
 	private String fileSize;
 	private Timestamp createdTime;
 	private Timestamp modifiedTime;
+	private String owner;
 
 	public S3FileDTO() {
 	}
 
 	public S3FileDTO(int id, String name, String notes, String fileSize, String path, Timestamp createdTime,
-			Timestamp modifiedTime) {
+			Timestamp modifiedTime, String owner) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -29,6 +30,7 @@ public class S3FileDTO implements Serializable {
 		this.path = path;
 		this.createdTime = createdTime;
 		this.modifiedTime = modifiedTime;
+		this.owner = owner;
 	}
 
 	public int getId() {
@@ -87,9 +89,17 @@ public class S3FileDTO implements Serializable {
 		this.fileSize = fileSize;
 	}
 
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
 	@Override
 	public String toString() {
-		return "S3FileDTO [id=" + id + ", name=" + name + ", path=" + path + ", notes=" + notes
-				+ ", fileSize=" + fileSize + ", createdTime=" + createdTime + ", modifiedTime=" + modifiedTime + "]";
+		return "S3FileDTO [id=" + id + ", name=" + name + ", owner=" + owner + ", path=" + path + ", notes=" + notes
+			+ ", fileSize=" + fileSize + ", createdTime=" + createdTime + ", modifiedTime=" + modifiedTime + "]";
 	}
 }

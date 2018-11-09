@@ -29,6 +29,12 @@ public interface S3FileDAO {
 	void createOrUpdate(S3File file);
 
 	/**
+	 * Retrieve all files in database
+	 * @return
+	 */
+	List<S3File> getAllS3File();
+
+	/**
 	 * Retrieve all files for a particular user
 	 * @param user ID
 	 * @return
@@ -41,4 +47,11 @@ public interface S3FileDAO {
 	 * @return file name
 	 */
 	public String getFileName(Integer fid);
+
+	/**
+	 * Get user who owns a file
+	 * @param file ID
+	 * @return user name
+	 */
+	public String getFileOwner(Integer fid);
 }

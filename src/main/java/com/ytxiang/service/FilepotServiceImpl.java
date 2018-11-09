@@ -193,29 +193,51 @@ public class FilepotServiceImpl implements FilepotService {
 		S3File returnUserFile = s3FileDao.getExistingFile(user.getId(), fileName);
 		S3FileDTO s3FileDTO = new S3FileDTO(returnUserFile.getId(),
 				returnUserFile.getFileName(), returnUserFile.getNotes(), returnUserFile.getSize(),
-				returnUserFile.getPath(), returnUserFile.getCreatedTime(), returnUserFile.getModifiedTime());
+				returnUserFile.getPath(), returnUserFile.getCreatedTime(), returnUserFile.getModifiedTime(),
+				returnUserFile.getUser().getFullName());
 
 		return s3FileDTO;
 	}
 
-	@Override
-	public S3FilePotDTO getFileList(String userName) {
+	private S3FilePotDTO getAllFiles(List<S3File> s3Files) {
 		S3FilePotDTO filesDTO = new S3FilePotDTO();
 		ArrayList<S3FileDTO> fileList = new ArrayList<S3FileDTO>();
-		User user = userDao.getUserByUserName(userName);
 
-		List<S3File> s3Files = s3FileDao.getAllS3File(user.getId());
 		if (s3Files!= null && !CollectionUtils.isEmpty(s3Files)) {
 			for (S3File f : s3Files) {
 				S3FileDTO s3FileDTO = new S3FileDTO(f.getId(), f.getFileName(),
 						f.getNotes(), f.getSize(), f.getPath(),
-						f.getCreatedTime(), f.getModifiedTime());
+						f.getCreatedTime(), f.getModifiedTime(),
+						f.getUser().getFullName());
 				fileList.add(s3FileDTO);
 			}
 		}
 
 		filesDTO.setFileList(fileList);
 		return filesDTO;
+	}
+
+	@Override
+	public S3FilePotDTO getFileList() {
+		List<S3File> s3Files = s3FileDao.getAllS3File();
+
+		return getAllFiles(s3Files);
+	}
+
+	@Override
+	public S3FilePotDTO getFileList(String userName) {
+		User user = userDao.getUserByUserName(userName);
+
+		List<S3File> s3Files = s3FileDao.getAllS3File(user.getId());
+		return getAllFiles(s3Files);
+	}
+
+	@Override
+	public void deleteFile(Integer fileId) {
+		String username = s3FileDao.getFileOwner(fileId);
+
+		if (username != null)
+			deleteFile(fileId, username);
 	}
 
 	@Override

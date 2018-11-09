@@ -65,31 +65,20 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
+                    <form id="adminform" class="form-horizontal" th:action="@{/admin/file/delete}" method="POST">
                         <div class="box-header" style="text-align: center;">
-                             <form id="fileform" class="form-horizontal" th:action="@{/file/upload}"
-				     method="POST" enctype="multipart/form-data">
-                                <div class="form-group">
-                                    <div class="col-xs-3 col-lg-2">
-                                       <input type="file" class="form-control" id="file" name="file"/>
-                                    </div>
-                                    <label for="notes" class="col-xs-2 col-lg-2 control-label">Drop a note</label>
-                                    <div class="col-xs-4 col-lg-3">
-									<input type="text" id="notes" name="notes" size=15 />
-                                    </div>
-                                    <div class="col-xs-3 col-lg-2">
-									<button id="ffsubmit" type="submit" class="btn btn-info">Add NEW File</button>
-                                    </div>
-                                </div>
-                             </form>
                         </div>
                         <div class="box-body">
+			    <div class="col-xs-2">
+				<button id="delete" type="button" class="btn btn-info">Delete Selected</button>
+			    </div>
                             <table id="filetab" th:if=${files} th:object="${files}"
                              class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
+                                    <th>Select</th>
                                     <th>File</th>
-                                    <th>Update</th>
-                                    <th>Delete</th>
+                                    <th>Owner</th>
                                     <th>First Upload</th>
                                     <th>Last Modified</th>
                                     <th>File Size</th>
@@ -98,24 +87,16 @@
                                 </thead>
                                 <tbody>
                                 <tr th:each="f : ${files}">
+                                    <td style="text-align: center">
+                                    	<input type="checkbox" id="idChecked" th:name="idChecked" th:value="${f.id}"/>
+                                    </td>
                                     <td>
                                         <a th:href="${f.path}" target="_blank">
                                             <span th:text="${f.name}">
                                             </span>
                                         </a>
                                     </td>
-                                    <td style="text-align: center">
-                                        <span name="refresher" title="Update"
-                                         th:data="@{/file/{id}/update(id=${f.id})}"
-                                         class="glyphicon glyphicon-edit">
-                                        </span>
-                                    </td>
-                                    <td style="text-align: center">
-                                        <span name="trash" title="Delete"
-                                         th:data="@{/file/{id}/delete(id=${f.id})}"
-                                         style="cursor: pointer"
-                                         class="glyphicon glyphicon-trash">
-                                        </span>
+                                    <td th:text="${f.owner}">
                                     </td>
                                     <td th:text="${f.createdTime}">
                                     </td>
@@ -124,10 +105,11 @@
                                     <td th:text="${f.fileSize}"></td>
                                     <td th:text="${f.notes}"></td>
                                 </tr>
-                                </tbody>
+                                </tfoot>
                             </table>
                         </div>
                         <!-- /.box-body -->
+                    </form>
                     </div>
                     <!-- /.box -->
                 </div>
@@ -138,8 +120,6 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-
-
 </div>
 
 <div th:replace="script"></div>
@@ -167,12 +147,30 @@
 <script>
     $(function () {
         $('#filetab').DataTable({
-            "paging": false,
+            "paging": true,
             "lengthChange": false,
-            "searching": false,
+            "searching": true,
             "ordering": true,
-            "info": false,
+            "info": true,
             "autoWidth": false
+        });
+    });
+    $(document).ready(function() {
+	$('#delete').click(function(e) {
+            e.preventDefault();
+            var n = $('#idChecked:checked').length;
+            //var n = $('input:checkbox:checked').length;
+            if (n == 0) {
+                alert("No file was selected.");
+                return false;
+            }
+	    var msg="Are you sure to delete ";
+            msg += (n == 1) ? "this file?" : "these " + n + " files?";
+            if (!confirm(msg)) {
+                return false;
+            }
+            $("#adminform").submit();
+            return true;
         });
     });
 </script>

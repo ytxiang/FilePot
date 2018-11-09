@@ -39,6 +39,9 @@ cloud:
       password:
 
 filepot:
+  admin:
+    account:
+    password:
   s3:
     bucket:
     namespace:

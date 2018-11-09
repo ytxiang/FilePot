@@ -32,6 +32,15 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
     </div>
+    <script >
+            function check(){
+                var a = window.location.search;
+                var b = "?error";
+                if (a == b) {
+                    alert("Incorrect username or password!\nPlease re-enter and try again.");
+                }
+            }
+    </script>
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">

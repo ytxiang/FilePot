@@ -27,9 +27,11 @@
 
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="one">
-                    <a th:href="@{/user/profile}">
-                        <span class="glyphicon glyphicon-user"></span> &nbsp;&nbsp;<span th:text="${user}?${user.fullName}"></span>
-                    </a>
+		    <a href="#">
+                        <span class="glyphicon glyphicon-user"></span> &nbsp;&nbsp;
+			<span th:text="${user}?${user.fullName}"></span>
+		        <span sec:authorize="hasAuthority('ROLE_ADMIN')" style="color:red;" th:text="Administrator"></span>
+		    </a>
                 </li>
                 <li class="two">
                     <a th:href="@{/logout}">

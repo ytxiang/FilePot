@@ -18,6 +18,10 @@ import org.hibernate.annotations.NamedQuery;
 @Table(name = "filetank")
 @NamedQueries({
     @NamedQuery(
+        name = "findAllFiles",
+        query = "from S3File"
+        ),
+    @NamedQuery(
         name = "findUserFiles",
         query = "from S3File where userId = :userId"
         ),
@@ -26,7 +30,7 @@ import org.hibernate.annotations.NamedQuery;
             query = "from S3File where userId = :userId and fileName = :fileName"
             ),
     @NamedQuery(
-        name = "getFileNameByID",
+        name = "getFileByID",
         query = "from S3File where id = :fileId"
         ),
 })

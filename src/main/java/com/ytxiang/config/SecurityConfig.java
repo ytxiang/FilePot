@@ -2,6 +2,7 @@ package com.ytxiang.config;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +44,12 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Value("${filepot.admin.account}")
+    private String ADMIN_NAME;
+
+    @Value("${filepot.admin.password}")
+    private String ADMIN_PASSWORD;
+
     @Autowired
     protected UserDetailService userDetailService;
 
@@ -69,8 +76,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	http.anonymous().disable();
 	http.requestCache().disable();
 
-	http.rememberMe().userDetailsService(userDetailService).key("uniqueAndSecret")
-		.useSecureCookie(false).alwaysRemember(true);
 	http.formLogin().loginProcessingUrl("/login").loginPage("/signon").defaultSuccessUrl("/")
 		.successHandler(new AuthenticationSuccessHandler());
 	http.logout().logoutSuccessHandler(new LogoutSuccessHandler());
@@ -80,11 +85,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 	DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 	provider.setPasswordEncoder(new BCryptPasswordEncoder());
 	provider.setUserDetailsService(userDetailService);
 	auth.authenticationProvider(provider);
+
+	auth.inMemoryAuthentication()
+	    .passwordEncoder(org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance())
+	    .withUser(ADMIN_NAME)
+	    .password(ADMIN_PASSWORD)
+	    .authorities("ROLE_ADMIN");
     }
 
     @Override

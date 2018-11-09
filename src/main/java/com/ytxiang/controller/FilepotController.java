@@ -1,5 +1,7 @@
 package com.ytxiang.controller;
 
+import java.util.List; 
+
 import com.amazonaws.services.cloudfront.model.Method;
 import com.ytxiang.bean.FileUploadForm;
 import com.ytxiang.bean.UserBean;
@@ -38,11 +40,15 @@ public class FilepotController {
     public String home(Model model) {
 	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	    if (auth == null)
-		return "redirect:/signon";
+		    return "redirect:/signon";
 
-	    S3FilePotDTO fpDto = filepotService.getFileList(auth.getName());
+	    boolean isAdmin = auth.getAuthorities().stream()
+		    .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+	    S3FilePotDTO fpDto = isAdmin ? filepotService.getFileList() :
+		    filepotService.getFileList(auth.getName());
 	    model.addAttribute("files", fpDto.getFileList());
-	return "index";
+
+	    return isAdmin ? "admin" : "index";
     }
 
 	@RequestMapping(value="/register", method = RequestMethod.GET)
@@ -110,6 +116,17 @@ public class FilepotController {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 		filepotService.deleteFile(Integer.parseInt(id), userName);
 		return "";
+	}
+
+	@RequestMapping(value="/admin/file/delete", method = RequestMethod.POST)
+	public String adminDeleteFiles(
+			@RequestParam(value = "idChecked", required = true) List<String> idfiles) {
+		if (idfiles != null) {
+			for (String idfileStr : idfiles) {
+				filepotService.deleteFile(Integer.valueOf(idfileStr));
+			}
+		}
+		return "redirect:/";
 	}
 
 	@RequestMapping(value="logout")

@@ -13,10 +13,12 @@ import com.ytxiang.dto.UserDTO;
 public interface FilepotService {
 	UserDTO getUser(String userName);
 	public void signUpUser(UserBean userbean) throws ValidationException;
+	public S3FilePotDTO getFileList();
 	public S3FilePotDTO getFileList(String userName);
 	public S3FileDTO upload(MultipartFile mfile, String notes, String userName)
 			throws IllegalStateException, IOException, ValidationException;
 	public S3FileDTO upload(MultipartFile mfile, Integer fid, String userName, String notes)
 			throws IllegalStateException, IOException, ValidationException;
+	public void deleteFile(Integer fileId);
 	public void deleteFile(Integer fileId, String userName);
 }
